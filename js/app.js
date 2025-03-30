@@ -43,7 +43,7 @@ var createScene = function () {
     );
 
    
-    var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+    var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI, true, scene");
     var instructions = new BABYLON.GUI.TextBlock();
     instructions.text = "Step 1: Check responsiveness\nStep 2: Call for help\nStep 3: Begin chest compressions";
     instructions.color = "white";
@@ -51,6 +51,7 @@ var createScene = function () {
     instructions.textHorizontalAlignment = BABYLON.GUI.Control.HORIZONTAL_ALIGNMENT_CENTER;
     instructions.textVerticalAlignment = BABYLON.GUI.Control.VERTICAL_ALIGNMENT_TOP;
     instructions.top = "20px";
+    instructions.background = "rgba(0, 0, 0, 0.5)";
     advancedTexture.addControl(instructions);
 
    
@@ -61,6 +62,9 @@ var createScene = function () {
                 uiOptions: { sessionMode: sessionMode }
             }).then(function (xrExperience) {
                 console.log("WebXR session enabled with mode:", sessionMode);
+                scene.activeCamera = xrExperience.basedExperience.camera;
+                advancedTexture.layer.layerMask= 0x10000000; 
+                xrExperience.basedExperience.camera.layerMask = 0x10000000;
             }).catch(function (err) {
                 console.error("Error creating XR experience:", err);
             });
